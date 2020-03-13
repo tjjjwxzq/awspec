@@ -47,6 +47,10 @@ module Awspec::Helper
       rescue
         # Prefer the HTTP/HTTPS protocol target group, but survive without it:
         begin
+          if res.nil?
+            res = elbv2_client.describe_target_groups(target_group_arns: [id])
+          end
+
           res.target_groups.single_resource(id)
         rescue
           return nil
